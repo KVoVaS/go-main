@@ -1,0 +1,47 @@
+syntax = "proto3";
+package documents.v1;
+option go_package = "documents/api/gen/documents/v1;documentsv1";
+import "google/api/annotations.proto";
+
+service DocumentService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/users"
+      body: "*"
+    };
+  }
+  rpc AddDocumentToUser(AddDocumentRequest) returns (AddDocumentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/users/{user_id}/documents"
+      body: "document"
+    };
+  }
+  rpc ListUserDocuments(ListUserDocumentsRequest) returns (ListUserDocumentsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users/{user_id}/documents"
+    };
+  }
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+}
+
+message Document {
+  string id = 1;
+  string title = 2;
+  string user_id = 3;
+}
+
+message CreateUserRequest { string name = 1; }
+message CreateUserResponse { User user = 1; }
+
+message AddDocumentRequest {
+  string user_id = 1;
+  Document document = 2;
+}
+message AddDocumentResponse { Document document = 1; }
+
+message ListUserDocumentsRequest { string user_id = 1; }
+message ListUserDocumentsResponse { repeated Document documents = 1; }

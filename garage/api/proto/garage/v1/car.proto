@@ -1,0 +1,40 @@
+syntax = "proto3";
+package garage.v1;
+option go_package = "github.com/example/garage/api/gen/garage/v1;garagev1";
+import "google/api/annotations.proto";
+
+service CarService {
+  rpc CreateCar(CreateCarRequest) returns (CreateCarResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cars"
+      body: "*"
+    };
+  }
+  rpc GetCar(GetCarRequest) returns (GetCarResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cars/{vin}"
+    };
+  }
+}
+
+message Car {
+  string vin = 1;
+  string brand = 2;
+  int32 year = 3;
+}
+
+message CreateCarRequest {
+  string vin = 1;
+  string brand = 2;
+  int32 year = 3;
+}
+message CreateCarResponse {
+  Car car = 1;
+}
+
+message GetCarRequest {
+  string vin = 1;
+}
+message GetCarResponse {
+  Car car = 1;
+}

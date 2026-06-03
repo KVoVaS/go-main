@@ -1,0 +1,74 @@
+syntax = "proto3";
+package assembly.v1;
+option go_package = "assembly/api/gen/assembly/v1;assemblyv1";
+import "google/api/annotations.proto";
+
+service AssemblyService {
+  // Собрать автомобиль (атомарная связка)
+  rpc AssembleCar(AssembleCarRequest) returns (AssembleCarResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cars/assemble"
+      body: "*"
+    };
+  }
+  // Получить полную спецификацию
+  rpc GetCarSpec(GetCarSpecRequest) returns (CarSpec) {
+    option (google.api.http) = {
+      get: "/api/v1/cars/{vin}/spec"
+    };
+  }
+  // Вспомогательные методы для создания двигателя и КПП
+  rpc CreateEngine(CreateEngineRequest) returns (Engine) {
+    option (google.api.http) = {
+      post: "/api/v1/engines"
+      body: "*"
+    };
+  }
+  rpc CreateTransmission(CreateTransmissionRequest) returns (Transmission) {
+    option (google.api.http) = {
+      post: "/api/v1/transmissions"
+      body: "*"
+    };
+  }
+}
+
+message Car {
+  string vin = 1;
+  string brand = 2;
+  int32 year = 3;
+}
+message Engine {
+  string id = 1;
+  int32 horsepower = 2;
+}
+message Transmission {
+  string id = 1;
+  string type = 2;
+}
+message CarSpec {
+  Car car = 1;
+  Engine engine = 2;
+  Transmission transmission = 3;
+}
+
+message AssembleCarRequest {
+  string vin = 1;
+  string brand = 2;
+  int32 year = 3;
+  string engine_id = 4;
+  string transmission_id = 5;
+}
+message AssembleCarResponse {
+  CarSpec spec = 1;
+}
+message GetCarSpecRequest {
+  string vin = 1;
+}
+message CreateEngineRequest {
+  string id = 1;
+  int32 horsepower = 2;
+}
+message CreateTransmissionRequest {
+  string id = 1;
+  string type = 2;
+}

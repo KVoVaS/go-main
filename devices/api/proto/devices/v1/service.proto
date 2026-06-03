@@ -1,0 +1,38 @@
+syntax = "proto3";
+package devices.v1;
+option go_package = "devices/api/gen/devices/v1;devicesv1";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service DeviceService {
+  // Публикация показания (синхронный, без потока)
+  rpc PublishReading(PublishReadingRequest) returns (PublishReadingResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/readings"
+      body: "*"
+    };
+  }
+  // Подписка на поток показаний устройства
+  rpc MonitorReadings(MonitorRequest) returns (stream Reading) {
+    option (google.api.http) = {
+      get: "/api/v1/devices/{device_id}/stream"
+    };
+  }
+}
+
+message Reading {
+  string device_id = 1;
+  double value = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message PublishReadingRequest {
+  string device_id = 1;
+  double value = 2;
+  // timestamp можно ставить автоматически на сервере
+}
+message PublishReadingResponse {}
+
+message MonitorRequest {
+  string device_id = 1;
+}
