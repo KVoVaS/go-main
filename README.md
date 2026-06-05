@@ -1,4 +1,5 @@
 Для данных задач использовалась локальная база данных PostgreSQL с паролем `secret` и портом `5432`
+Для данных задач нужно скачать `protoc`: https://github.com/protocolbuffers/protobuf/releases 
 
 # Базовый гараж (Задача 1) `../garage`
 
@@ -20,6 +21,7 @@
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
 ```
 
@@ -32,11 +34,11 @@ go mod tidy
 3. Генерация кода
 
 ```bash
-protoc -I api/proto -I third_party\
---go_out=api/gen --go_opt=paths=source_relative \
---go-grpc_out=api/gen --go-grpc_opt=paths=source_relative \
---grpc-gateway_out=api/gen --grpc-gateway_opt=paths=source_relative \
-api/proto/garage/v1/car.proto
+protoc -I api/proto -I third_party \
+  --go_out=api/gen --go_opt=paths=source_relative \
+  --go-grpc_out=api/gen --go-grpc_opt=paths=source_relative \
+  --grpc-gateway_out=api/gen --grpc-gateway_opt=paths=source_relative \
+  api/proto/garage/v1/car.proto
 ```
 
 4. Запустить сервер
